@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Art Deco Valentine 🌹</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: 'Playfair Display', serif;
+      background: linear-gradient(rgba(255, 182, 193, 0.4), rgba(255, 182, 193, 0.4)), 
+                  url('https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=2070&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      touch-action: manipulation;
+    }
+
+    .start-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(128, 0, 32, 0.95);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      cursor: pointer;
+      transition: opacity 0.5s ease;
+    }
+
+    .start-screen.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .start-text {
+      color: #fff5f7;
+      font-size: 32px;
+      text-align: center;
+      margin-bottom: 20px;
+      animation: pulse 2s infinite;
+    }
+
+    .start-hint {
+      color: #d4af37;
+      font-size: 18px;
+      font-style: italic;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .container {
+      background: #fff5f7;
+      padding: 40px 30px;
+      text-align: center;
+      border-radius: 5px; 
+      border: 4px double #d4af37;
+      box-shadow: 0 0 50px rgba(128, 0, 32, 0.3);
+      width: 85%;
+      max-width: 500px;
+      z-index: 10;
+      position: relative;
+      opacity: 0;
+      transform: scale(0.9);
+      transition: all 0.5s ease;
+    }
+
+    .container.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    img {
+      width: 200px;
+      height: 280px;
+      object-fit: cover;
+      border-radius: 8px;
+      filter: sepia(0.2) contrast(1.05);
+      margin-bottom: 30px;
+      border: 2px solid #d4af37;
+    }
+
+    h2 {
+      font-size: 24px;
+      color: #800020;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 30px;
+    }
+
+    .buttons {
+      position: relative;
+      min-height: 80px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      font-size: 14px;
+      border: 2px solid #d4af37;
+      background: transparent;
+      color: #800020;
+      cursor: pointer;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-family: 'Playfair Display', serif;
+      transition: all 0.2s ease;
+    }
+
+    .yes {
+      background: #ff4d6d;
+      color: white;
+      border-color: #ff4d6d;
+    }
+
+    .yes:hover {
+      background: #e6425e;
+      transform: scale(1.05);
+    }
+
+    .no {
+      color: #a3a3a3;
+      border-color: #a3a3a3;
+      background: white;
+      transition: left 0.6s ease-out, top 0.6s ease-out;
+      will-change: left, top;
+    }
+
+    .heart {
+      position: fixed;
+      bottom: -10%;
+      color: #d4af37;
+      font-size: 22px;
+      user-select: none;
+      pointer-events: none;
+      animation: floatUp 5s linear infinite;
+      opacity: 0;
+      z-index: 1;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+      20% { opacity: 0.7; }
+      100% { transform: translateY(-115vh) rotate(360deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Start screen to trigger music -->
+  <div class="start-screen" id="startScreen" onclick="startExperience()">
+    <div class="start-text">💕 Click anywhere to enter 💕</div>
+    <div class="start-hint">Art Deco awaits...</div>
+  </div>
+
+  <div class="container" id="container">
+    <img src="https://drive.google.com/uc?export=download&id=IMAGE_ID">
+
+    
+    <h2>Will you be my Valentine? 💕</h2>
+    
+    <div class="buttons">
+      <button class="btn yes" onclick="yesClicked()">Yes</button>
+      <button class="btn no" id="noBtn">No</button>
+    </div>
+  </div>
+
+  <audio id="bgMusic" loop preload="auto">
+    <source src="Art_Deco.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    const music = document.getElementById('bgMusic');
+    const startScreen = document.getElementById('startScreen');
+    const container = document.getElementById('container');
+    const noBtn = document.getElementById('noBtn');
+
+    function startExperience() {
+      // Hide start screen
+      startScreen.classList.add('hidden');
+      
+      // Show container
+      setTimeout(() => {
+        container.classList.add('visible');
+      }, 300);
+      
+      // Start music
+      music.volume = 0.6;
+      music.play()
+        .then(() => {
+          console.log('Music started playing!');
+        })
+        .catch(error => {
+          console.error('Music playback failed:', error);
+          setTimeout(() => {
+            music.play().catch(e => console.log('Retry failed:', e));
+          }, 500);
+        });
+    }
+
+    function yesClicked() {
+      alert("You're so Art Deco... and you're mine now. 🌹");
+      for(let i = 0; i < 20; i++) {
+        setTimeout(createHeart, i * 100);
+      }
+    }
+
+    function moveButtonAway(mouseX, mouseY) {
+      // Get the viewport dimensions more reliably
+      const viewportWidth = document.documentElement.clientWidth;
+      const viewportHeight = document.documentElement.clientHeight;
+      
+      // Get button position and size
+      const rect = noBtn.getBoundingClientRect();
+      const btnWidth = rect.width;
+      const btnHeight = rect.height;
+      
+      const btnCenterX = rect.left + btnWidth / 2;
+      const btnCenterY = rect.top + btnHeight / 2;
+      
+      // Calculate direction away from mouse
+      let deltaX = btnCenterX - mouseX;
+      let deltaY = btnCenterY - mouseY;
+      const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+      
+      // Normalize direction (handle zero distance)
+      if (distance > 0) {
+        deltaX = deltaX / distance;
+        deltaY = deltaY / distance;
+      } else {
+        // Random direction if mouse is exactly on button
+        const angle = Math.random() * Math.PI * 2;
+        deltaX = Math.cos(angle);
+        deltaY = Math.sin(angle);
+      }
+      
+      // Move 40px away
+      const moveDistance = 40;
+      const newCenterX = btnCenterX + deltaX * moveDistance;
+      const newCenterY = btnCenterY + deltaY * moveDistance;
+      
+      // Convert to top-left coordinates
+      let newLeft = newCenterX - btnWidth / 2;
+      let newTop = newCenterY - btnHeight / 2;
+      
+      // Use very conservative boundaries - 15% margin from edges
+      const MARGIN = 0.15;
+      const ABSOLUTE_MIN_MARGIN = 60; // At least 60px from edge
+      
+      const minLeft = Math.max(viewportWidth * MARGIN, ABSOLUTE_MIN_MARGIN);
+      const minTop = Math.max(viewportHeight * MARGIN, ABSOLUTE_MIN_MARGIN);
+      const maxLeft = Math.min(viewportWidth * (1 - MARGIN) - btnWidth, viewportWidth - btnWidth - ABSOLUTE_MIN_MARGIN);
+      const maxTop = Math.min(viewportHeight * (1 - MARGIN) - btnHeight, viewportHeight - btnHeight - ABSOLUTE_MIN_MARGIN);
+      
+      // Clamp position to safe area
+      newLeft = Math.max(minLeft, Math.min(newLeft, maxLeft));
+      newTop = Math.max(minTop, Math.min(newTop, maxTop));
+      
+      // Apply new position
+      noBtn.style.position = 'fixed';
+      noBtn.style.left = Math.floor(newLeft) + 'px';
+      noBtn.style.top = Math.floor(newTop) + 'px';
+      noBtn.style.zIndex = '1000';
+    }
+
+    // Track mouse movement
+    let lastCheckTime = 0;
+    document.addEventListener('mousemove', (e) => {
+      const now = Date.now();
+      if (now - lastCheckTime < 100) return;
+      lastCheckTime = now;
+      
+      const rect = noBtn.getBoundingClientRect();
+      const btnCenterX = rect.left + rect.width / 2;
+      const btnCenterY = rect.top + rect.height / 2;
+      
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+      
+      // Calculate distance from mouse to button center
+      const distanceToButton = Math.sqrt(
+        Math.pow(btnCenterX - mouseX, 2) + 
+        Math.pow(btnCenterY - mouseY, 2)
+      );
+      
+      // If mouse gets within 100px, move button away
+      if (distanceToButton < 100) {
+        moveButtonAway(mouseX, mouseY);
+      }
+    });
+
+    // Handle touch events
+    document.addEventListener('touchmove', (e) => {
+      if (!e.touches || !e.touches[0]) return;
+      
+      const touch = e.touches[0];
+      const rect = noBtn.getBoundingClientRect();
+      const btnCenterX = rect.left + rect.width / 2;
+      const btnCenterY = rect.top + rect.height / 2;
+      
+      const distanceToButton = Math.sqrt(
+        Math.pow(btnCenterX - touch.clientX, 2) + 
+        Math.pow(btnCenterY - touch.clientY, 2)
+      );
+      
+      if (distanceToButton < 100) {
+        moveButtonAway(touch.clientX, touch.clientY);
+      }
+    });
+
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.innerHTML = Math.random() > 0.5 ? '✨' : '❤️';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = (Math.random() * 2 + 4) + 's';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 6000);
+    }
+    
+    setInterval(createHeart, 400);
+
+    // Preload the audio
+    window.addEventListener('load', () => {
+      music.load();
+    });
+  </script>
+</body>
+</html>
